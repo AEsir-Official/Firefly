@@ -8,6 +8,7 @@ import FontSetup from "@components/features/FontSetup.astro";
 import MusicManager from "@components/features/MusicManager.astro";
 import SakuraEffect from "@components/features/SakuraEffect.astro";
 import ConfigCarrier from "@components/layout/ConfigCarrier.astro";
+import WaterIntro from "@components/WaterIntro.astro";
 
 import {
 	analyticsConfig,
@@ -89,9 +90,28 @@ const siteLang = lang.replace("_", "-");
 ---
 
 <!doctype html>
-<html lang={siteLang} class="bg-(--page-bg) text-[14px] md:text-[16px]" data-wallpaper-mode={backgroundWallpaper.mode}>
+<html
+  lang={siteLang}
+  class:list={[
+    "bg-(--page-bg) text-[14px] md:text-[16px]",
+    { "intro-active": isHomePageCheck },
+  ]}
+  data-wallpaper-mode={backgroundWallpaper.mode}
+>
   <head>
     <meta charset="UTF-8" />
+    {isHomePageCheck && (
+      <style is:inline>
+        html.intro-active,
+        html.intro-active body {
+          overflow: hidden !important;
+        }
+
+        html.intro-active body > :not(#water-intro) {
+          visibility: hidden !important;
+        }
+      </style>
+    )}
     {analyticsConfig?.googleAnalyticsId && (
             <GoogleAnalytics analyticsId={analyticsConfig.googleAnalyticsId} />
     )}
@@ -565,7 +585,7 @@ const siteLang = lang.replace("_", "-");
       },
     ]}
   >
-
+    {isHomePageCheck && <WaterIntro />}
     <div id="progress-bar"></div>
 
     {/* 卡片样式：根据 localStorage 覆盖默认配置 */}
